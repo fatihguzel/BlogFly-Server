@@ -7,7 +7,7 @@ dotenv.config({
   path: path.join(__dirname, "config", ".env"),
 });
 
-const app = require("./app");
+const app = require("./src/app");
 const server = http.createServer(app);
 
 const port = process.env.PORT || 5000;
