@@ -16,12 +16,6 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Please prove a password"],
     select: false,
   },
-  blogs: [
-    {
-      title: String,
-      text: String,
-    },
-  ],
 });
 
 module.exports.User = mongoose.model("User", UserSchema);

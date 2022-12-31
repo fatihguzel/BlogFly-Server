@@ -15,9 +15,14 @@ const version = process.env.NODE_ENV;
 const mongo_uri = process.env.MONGO_URI;
 
 mongoose.set("strictQuery", true);
-mongoose.connect(mongo_uri, {}, (err) => {
-  if (err) throw err;
-  server.listen(port, () =>
-    console.log(`Api start on port: ${port} -- version: ${version}`)
-  );
-});
+
+mongoose.connect(
+  "mongodb+srv://BlogFly:BlogFly@mehmetfatihguzel.7trpf8x.mongodb.net/BlogFly?retryWrites=true&w=majority",
+  {},
+  (err) => {
+    if (err) throw err;
+    server.listen(port, () =>
+      console.log(`Api start on port: ${port} -- version: ${version}`)
+    );
+  }
+);
