@@ -17,7 +17,7 @@ const store = new MongoDBStore({
 
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["https://blogfly-front.vercel.app"],
     credentials: true, //access-control-allow-credentials:true
     optionSuccessStatus: 200,
   })
