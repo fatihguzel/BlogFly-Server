@@ -35,6 +35,10 @@ const sessionMiddleware = session({
   },
 });
 
+if (process.env.NODE_ENV === "production") {
+  require("./start/production")(app);
+}
+
 app.use(sessionMiddleware);
 
 app.use(bodyParser.json());
