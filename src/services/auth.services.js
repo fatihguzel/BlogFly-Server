@@ -41,8 +41,30 @@ const getProfileService = async (user) => {
   return { success: true, data: user };
 };
 
+const resetPasswordService = async (
+  email,
+  oldPassword,
+  newPassword,
+  againPassword
+) => {
+  const user = await User.findOne({ email }).select("+password");
+  console.log(user.password);
+  if (!(await comparePassword(oldPassword, user.password)))
+    throw new CustomError(400, "Girmiş olduğunuz şuanki şifreniz yanlış");
+
+  if (newPassword !== againPassword)
+    throw new CustomError(400, "Lütfen şifre ve şifre tekrarını doğru giriniz");
+
+  user.password = hashPassword(newPassword);
+  console.log(user.password);
+
+  user.save();
+  return { success: true, data: user };
+};
+
 module.exports = {
   registerService,
   loginService,
   getProfileService,
+  resetPasswordService,
 };

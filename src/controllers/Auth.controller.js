@@ -4,6 +4,7 @@ const {
   registerService,
   loginService,
   getProfileService,
+  resetPasswordService,
 } = require("../services/auth.services");
 
 class AuthController {
@@ -45,6 +46,17 @@ class AuthController {
         res.json({ success: true });
       });
     });
+  });
+
+  static resetPassword = expressAsyncHandler(async (req, res) => {
+    const { email, oldPassword, newPassword, againPassword } = req.body;
+    const response = await resetPasswordService(
+      email,
+      oldPassword,
+      newPassword,
+      againPassword
+    );
+    res.json(response);
   });
 }
 
