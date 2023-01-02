@@ -5,11 +5,11 @@ const { emailValidator, passwordValidator } = require("../utils/validators");
 
 const registerService = async (username, email, password) => {
   if (!emailValidator(email)) {
-    throw new CustomError(400, "YOUR_EMAIL_FORMAT_IS_INCORRECT");
+    throw new CustomError(400, "YOUR EMAIL FORMAT IS INCORRECT");
   }
 
   if (!passwordValidator(password)) {
-    throw new CustomError(400, "YOUR_PASWORD_FORMAT_IS_INCORRECT");
+    throw new CustomError(400, "YOUR PASWORD FORMAT IS INCORRECT");
   }
 
   const user = await new User({
