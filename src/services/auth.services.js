@@ -11,6 +11,8 @@ const registerService = async (username, email, password) => {
   if (!passwordValidator(password)) {
     throw new CustomError(400, "YOUR PASWORD FORMAT IS INCORRECT");
   }
+  const checkUser = await User.findOne({ username });
+  if (checkUser) throw new CustomError(400, "Username is already exists");
 
   const user = await new User({
     username: username,

@@ -1,7 +1,6 @@
 const { User } = require("../model/UserModel");
 const CustomError = require("../error/CustomError");
 const { Blog } = require("../model/BlogModel");
-const { ObjectId } = require("mongodb");
 
 const writeBlogService = async (username, title, text) => {
   const blogger = await User.findOne({ username }).select("-email");

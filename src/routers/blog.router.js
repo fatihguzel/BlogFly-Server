@@ -8,4 +8,4 @@ blogRouter.route("/getUserBlogs").post(BlogController.getUserBlog);
 blogRouter.route("/getAllBlogs").get(BlogController.getAllBlogs);
 blogRouter.route("/getSingleBlog").post(BlogController.getSingleBlog);
 
-module.exports = blogRouter;
+module.exports.blogRouter = blogRouter;

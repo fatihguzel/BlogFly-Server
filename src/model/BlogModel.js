@@ -15,6 +15,7 @@ const BlogSchema = new mongoose.Schema(
     username: {
       type: String,
     },
+    comments: [],
   },
   { timestamps: true }
 );
