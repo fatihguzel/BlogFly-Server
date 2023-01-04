@@ -53,9 +53,14 @@ const getSingleBlog = async (id) => {
 
   return { success: true, data: singleBlog };
 };
+
+const likeBlogService = async ({ blogId, user }) => {
+  return { success: user };
+};
 module.exports = {
   writeBlogService,
   getUserBlogService,
   getAllBlogs,
   getSingleBlog,
+  likeBlogService,
 };

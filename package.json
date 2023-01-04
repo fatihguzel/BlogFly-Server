@@ -9,8 +9,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "set NODE_ENV=development &&  nodemon src/server",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "vercel-build": "yarn build && yarn run pack && cd api && node -r ts-eager/register ./_lib/script/build.ts"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
