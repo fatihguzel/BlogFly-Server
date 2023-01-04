@@ -6,6 +6,7 @@ const {
   getUserBlogService,
   getSingleBlog,
   likeBlogService,
+  undoLikeService,
 } = require("../services/blog.services");
 
 class BlogController {
@@ -41,6 +42,15 @@ class BlogController {
     const { blogId } = req.body;
     const user = req.user;
     const response = await likeBlogService({ blogId, user });
+
+    res.json(response);
+  });
+
+  static undoLike = expressAsyncHandler(async (req, res) => {
+    const { blogId } = req.body;
+    const user = req.user;
+
+    const response = await undoLikeService({ blogId, user });
 
     res.json(response);
   });

@@ -55,7 +55,28 @@ const getSingleBlog = async (id) => {
 };
 
 const likeBlogService = async ({ blogId, user }) => {
-  return { success: user };
+  const blog = await Blog.findById(blogId).select("likes");
+  if (!blog) throw new CustomError(400, "Like atma işlemi geçersiz");
+
+  if (blog.likes.includes(`${user.id}`))
+    blog.likes = blog.likes.filter((like) => like !== user.id);
+  else {
+    blog.likes.push(user.id);
+  }
+
+  blog.save();
+  return { success: true, data: blog };
+};
+
+const undoLikeService = async ({ blogId, user }) => {
+  const blog = await Blog.findById(blogId).select("likes");
+  if (!blog) throw new CustomError(400, "Dislike atma işlemi geçersiz");
+
+  blog.likes = blog.likes.filter((like) => like !== user.id);
+
+  blog.save();
+
+  return { success: true, data: blog };
 };
 module.exports = {
   writeBlogService,
@@ -63,4 +84,5 @@ module.exports = {
   getAllBlogs,
   getSingleBlog,
   likeBlogService,
+  undoLikeService,
 };
