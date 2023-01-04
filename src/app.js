@@ -6,6 +6,7 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const path = require("path");
+const serverless = require("serverless-http");
 const { indexRouter } = require("./routers/index.router");
 
 const mongo_uri = process.env.MONGO_URI;
@@ -47,4 +48,5 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/", indexRouter);
 
 module.exports = app;
+module.exports.handler = serverless(app);
 module.exports.sessionMiddleware = sessionMiddleware;
