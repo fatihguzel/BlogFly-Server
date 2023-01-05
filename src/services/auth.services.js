@@ -1,4 +1,5 @@
 const { User } = require("../model/UserModel");
+const { Blog } = require("../model/BlogModel");
 const { hashPassword, comparePassword } = require("../utils/passwordUtils");
 const CustomError = require("../error/CustomError");
 const { emailValidator, passwordValidator } = require("../utils/validators");
@@ -70,9 +71,21 @@ const resetPasswordService = async (
   return { success: true, data: user };
 };
 
+const removeAccountService = async (user) => {
+  const userId = user.id;
+  const removeUser = await User.findById(userId);
+  const removeUserBlog = await Blog.find({ user });
+  console.log(removeUserBlog);
+  await removeUser.remove();
+  await removeUserBlog.map((blog) => blog.remove());
+
+  return { success: true };
+};
+
 module.exports = {
   registerService,
   loginService,
   getProfileService,
   resetPasswordService,
+  removeAccountService,
 };

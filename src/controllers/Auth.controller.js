@@ -5,6 +5,7 @@ const {
   loginService,
   getProfileService,
   resetPasswordService,
+  removeAccountService,
 } = require("../services/auth.services");
 
 class AuthController {
@@ -56,6 +57,14 @@ class AuthController {
       newPassword,
       againPassword
     );
+    res.json(response);
+  });
+
+  static removeAccount = expressAsyncHandler(async (req, res) => {
+    const user = req.user;
+
+    const response = await removeAccountService(user);
+
     res.json(response);
   });
 }

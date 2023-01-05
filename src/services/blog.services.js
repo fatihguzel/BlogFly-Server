@@ -63,7 +63,7 @@ const likeBlogService = async ({ blogId, user }) => {
   else {
     blog.likes.push(user.id);
   }
-
+  console.log(blog);
   blog.save();
   return { success: true, data: blog };
 };

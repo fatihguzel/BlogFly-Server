@@ -7,6 +7,13 @@ authRouter.route("/register").post(AuthController.register);
 authRouter.route("/login").post(AuthController.login);
 authRouter.route("/logout").get(AuthController.logout);
 authRouter.route("/profile").all(authMiddleware).get(AuthController.getProfile);
-authRouter.route("/resetPassword").put(AuthController.resetPassword);
+authRouter
+  .route("/resetPassword")
+  .all(authMiddleware)
+  .put(AuthController.resetPassword);
+authRouter
+  .route("/removeAccount")
+  .all(authMiddleware)
+  .delete(AuthController.removeAccount);
 
 module.exports.authRouter = authRouter;
