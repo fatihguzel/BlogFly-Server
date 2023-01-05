@@ -41,6 +41,7 @@ class BlogController {
   static likeBlog = expressAsyncHandler(async (req, res) => {
     const { blogId } = req.body;
     const user = req.user;
+
     const response = await likeBlogService({ blogId, user });
 
     res.json(response);
