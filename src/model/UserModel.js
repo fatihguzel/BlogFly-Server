@@ -16,6 +16,14 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Please prove a password"],
     select: false,
   },
+  isBlocked: {
+    type: Boolean,
+    default: false,
+  },
+  role: {
+    type: String,
+    default: "user",
+  },
 });
 
 module.exports.User = mongoose.model("User", UserSchema);
