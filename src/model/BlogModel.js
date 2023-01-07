@@ -17,8 +17,14 @@ const BlogSchema = new mongoose.Schema(
     },
     comments: [],
     likes: [],
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 module.exports.Blog = mongoose.model("Blogs", BlogSchema);

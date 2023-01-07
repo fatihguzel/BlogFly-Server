@@ -27,6 +27,17 @@ const writeBlogService = async (username, title, text) => {
   return { success: true, data: blog };
 };
 
+const removeUserBlogService = async (id) => {
+  const userBlog = await Blog.findById(id);
+
+  if (!userBlog)
+    throw new CustomError(400, "Silmek istediğiniz blog bulunamadı");
+
+  userBlog.remove();
+
+  return { success: true, data: `${userBlog.title} isimli blog silindi` };
+};
+
 const getUserBlogService = async (email) => {
   const userInformation = await User.findOne({ email });
 
@@ -80,6 +91,7 @@ const undoLikeService = async ({ blogId, user }) => {
 };
 module.exports = {
   writeBlogService,
+  removeUserBlogService,
   getUserBlogService,
   getAllBlogs,
   getSingleBlog,

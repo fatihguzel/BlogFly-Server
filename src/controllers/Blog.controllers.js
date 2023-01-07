@@ -7,6 +7,7 @@ const {
   getSingleBlog,
   likeBlogService,
   undoLikeService,
+  removeUserBlogService,
 } = require("../services/blog.services");
 
 class BlogController {
@@ -14,6 +15,13 @@ class BlogController {
     const { username, title, text } = req.body;
     const response = await writeBlogService(username, title, text);
 
+    res.json(response);
+  });
+
+  static removeUserBlog = expressAsyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    const response = await removeUserBlogService(id);
     res.json(response);
   });
 

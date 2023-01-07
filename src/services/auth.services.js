@@ -3,6 +3,7 @@ const { Blog } = require("../model/BlogModel");
 const { hashPassword, comparePassword } = require("../utils/passwordUtils");
 const CustomError = require("../error/CustomError");
 const { emailValidator, passwordValidator } = require("../utils/validators");
+const { Comment } = require("../model/CommentModel");
 
 const registerService = async (username, email, password) => {
   if (!emailValidator(email)) {
@@ -34,6 +35,7 @@ const loginService = async (email, password) => {
   }
 
   if (await comparePassword(password, user.password)) {
+    if (user.isBlocked) throw new CustomError(400, "Hesabınız Bloklandı");
     return { success: true, data: user };
   } else {
     throw new CustomError(400, "Wrong Password");
@@ -75,10 +77,12 @@ const removeAccountService = async (user) => {
   const userId = user.id;
   const removeUser = await User.findById(userId);
   const removeUserBlog = await Blog.find({ user });
-  console.log(removeUserBlog);
-  await removeUser.remove();
-  await removeUserBlog.map((blog) => blog.remove());
+  const removeUserComments = await Comment.find({ user });
 
+  await removeUser.remove();
+  if (removeUserBlog) await removeUserBlog.map((blog) => blog.remove());
+  if (removeUserComments)
+    await removeUserComments.map((comment) => comment.remove());
   return { success: true };
 };
 

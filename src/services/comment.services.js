@@ -22,8 +22,8 @@ const writeCommentService = async (blogId, username, text) => {
 
   blog.comments.push(comment);
 
-  await blog.save();
   await comment.save();
+  await blog.save();
 
   return { success: true, data: comment };
 };

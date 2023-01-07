@@ -16,8 +16,14 @@ const CommentSchema = new mongoose.Schema(
     blog: {
       type: mongoose.Types.ObjectId,
     },
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 module.exports.Comment = mongoose.model("Comments", CommentSchema);
