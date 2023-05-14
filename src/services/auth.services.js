@@ -4,6 +4,7 @@ const { hashPassword, comparePassword } = require("../utils/passwordUtils");
 const CustomError = require("../error/CustomError");
 const { emailValidator, passwordValidator } = require("../utils/validators");
 const { Comment } = require("../model/CommentModel");
+const { RelationShips } = require("../model/Relationships");
 
 const registerService = async (username, email, password) => {
   if (!emailValidator(email)) {
@@ -22,6 +23,10 @@ const registerService = async (username, email, password) => {
     password: hashPassword(password),
   });
 
+  const relation = await new RelationShips({
+    user: user,
+  });
+  await relation.save();
   await user.save();
 
   return { success: true, data: user };

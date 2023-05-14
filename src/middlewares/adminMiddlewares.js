@@ -5,8 +5,8 @@ const { User } = require("../model/UserModel");
 const adminMiddleware = expressAsyncHandler(async (req, res, next) => {
   const userEmail = req.session.email;
   console.log(req.session.email);
-  const isAdmin = await User.findOne({ userEmail });
-  console.log(isAdmin);
+  const isAdmin = await User.findOne({ email: userEmail });
+  console.log("AdminMiddleware", isAdmin);
   if (isAdmin.role !== "admin") {
     throw new CustomError(403, "Giriş Yetkiniz Bulunmamaktadır!");
   }
