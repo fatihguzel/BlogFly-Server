@@ -5,6 +5,7 @@ const { authRouter } = require("./auth.router");
 const { blogRouter } = require("./blog.router");
 const { commentRouter } = require("./comment.router");
 const { relationShipsRouter } = require("./relationships.router");
+const { contactRouter } = require("./contact.router");
 
 const indexRouter = express.Router();
 
@@ -13,6 +14,7 @@ indexRouter.use("/blog", blogRouter);
 indexRouter.use("/comment", commentRouter);
 indexRouter.use("/admin", adminRouter);
 indexRouter.use("/relationships", relationShipsRouter);
+indexRouter.use("/contact", contactRouter);
 indexRouter.use(ErrorHandler);
 
 module.exports.indexRouter = indexRouter;
