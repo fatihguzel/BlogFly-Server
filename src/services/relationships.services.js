@@ -16,7 +16,7 @@ const sendFriendRequestService = async ({ user, requestedUsername }) => {
     throw new CustomError(400, "You can't send yourself a friend request");
 
   const friend = await User.findOne({ username: requestedUsername });
-  console.log(friend);
+
   if (friend === null) throw new CustomError(400, "Friend Not Found");
 
   // İsteği Alan Kullanıcı
@@ -30,6 +30,29 @@ const sendFriendRequestService = async ({ user, requestedUsername }) => {
     (request) => request?.username === friend.username
   );
   if (x.length !== 0) throw new CustomError(400, "Friend Request Already Sent");
+
+  const senderFriendRequests = sender.friendrequests;
+  const checkSenderFriendRequests = senderFriendRequests.filter(
+    (request) => request?.username !== friend?.username
+  );
+
+  console.log("senderFriendRequests", senderFriendRequests);
+  console.log("checkSenderFriendRequests", checkSenderFriendRequests);
+
+  if (
+    JSON.stringify(senderFriendRequests) !==
+    JSON.stringify(checkSenderFriendRequests)
+  )
+    throw new CustomError(400, "The user has already sent you a request");
+
+  const afterAddingFriend = sender.friends;
+  const checkAfterAddingFriend = afterAddingFriend.filter(
+    (request) => request?.username !== friend?.username
+  );
+  if (
+    JSON.stringify(afterAddingFriend) !== JSON.stringify(checkAfterAddingFriend)
+  )
+    throw new CustomError(400, "User already your friend cannot send request");
 
   sender?.pendingRequest.push({
     username: friend.username,
@@ -84,7 +107,7 @@ const acceptFriendRequestService = async ({ user, requestedUsername }) => {
   const newFriendRequestsList = receiverFriendRequests.filter(
     (friend) => friend?.username !== requestedUsername
   );
-  console.log(receiverFriendRequests, newFriendRequestsList);
+
   if (
     JSON.stringify(receiverFriendRequests) ===
     JSON.stringify(newFriendRequestsList)
@@ -104,6 +127,9 @@ const acceptFriendRequestService = async ({ user, requestedUsername }) => {
   const newPendingList = senderPendingFriendRequests.filter(
     (friend) => friend?.username !== user?.username
   );
+
+  console.log("senderPendingFriendRequests:::", senderPendingFriendRequests);
+  console.log("newPendingList:::", newPendingList);
 
   sender.friends.push({
     username: user?.username,
