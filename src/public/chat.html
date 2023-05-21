@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .chat-container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+
+      .chat-messages {
+        height: 300px;
+        overflow-y: scroll;
+        border: 1px solid #ccc;
+        padding: 10px;
+      }
+
+      .chat-input {
+        display: flex;
+        margin-top: 10px;
+      }
+
+      .chat-input input[type="text"] {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+
+      .chat-input button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+
+      .message {
+        margin-bottom: 10px;
+      }
+
+      .message-self {
+        text-align: right;
+      }
+
+      .message-other {
+        text-align: left;
+      }
+
+      .message-sender {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chat-container">
+      <div class="chat-messages" id="message-container"></div>
+
+      <div class="chat-input">
+        <input type="text" id="room-input" placeholder="Oda Adı" />
+        <input type="text" id="message-input" placeholder="Mesajınızı girin" />
+        <button id="send-button">Gönder</button>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      // Rastgele kullanıcı adları
+      const userNames = [
+        "Kullanıcı1",
+        "Kullanıcı2",
+        "Kullanıcı3",
+        "Kullanıcı4",
+        "Kullanıcı5",
+      ];
+
+      // Rastgele kullanıcı adı seçme
+      function getRandomUserName() {
+        const randomIndex = Math.floor(Math.random() * userNames.length);
+        return userNames[randomIndex];
+      }
+
+      // Gönder butonuna tıklandığında
+      document.getElementById("send-button").addEventListener("click", () => {
+        const roomInput = document.getElementById("room-input");
+        const messageInput = document.getElementById("message-input");
+        const room = roomInput.value.trim();
+        const message = messageInput.value.trim();
+
+        if (room && message) {
+          socket.emit("joinRoom", room); // Odaya katılma işlemi
+          socket.emit("message", { room, message }); // Mesaj gönderme işlemi
+          messageInput.value = "";
+        }
+      });
+
+      // Mesaj alma olayı
+      socket.on("message", (data) => {
+        const messageContainer = document.getElementById("message-container");
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message");
+
+        // Mesajı kimin gönderdiğini kontrol et
+        if (data.sender === socket.id) {
+          messageElement.classList.add("message-self");
+          messageElement.innerHTML = `<div class="message-content">${data.message}</div>`;
+        } else {
+          messageElement.classList.add("message-other");
+          messageElement.innerHTML = `
+            <div class="message-sender">${data.sender}</div>
+            <div class="message-content">${data.message}</div>
+          `;
+        }
+
+        messageContainer.appendChild(messageElement);
+
+        // Mesajları aşağı kaydır
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+      });
+
+      // Kullanıcı adını güncelleme
+      socket.on("connect", () => {
+        const userName = getRandomUserName();
+        socket.emit("updateUserName", userName);
+      });
+    </script>
+  </body>
+</html>
