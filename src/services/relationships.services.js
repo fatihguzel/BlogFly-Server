@@ -4,7 +4,14 @@ const { User } = require("../model/UserModel");
 
 const getFriendsService = async ({ user }) => {
   const relationships = await RelationShips.findOne({ user });
-  console.log("relation", relationships);
+
+  for (let i = 0; i < relationships.friends.length; i++) {
+    const friend = relationships.friends[i];
+    const auth = await User.findOne({ email: friend.email });
+    friend.isLogined = auth.isLogined;
+  }
+
+  console.log(relationships.friends);
   return { success: true, data: relationships.friends };
 };
 
