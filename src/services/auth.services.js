@@ -41,6 +41,8 @@ const loginService = async (email, password) => {
 
   if (await comparePassword(password, user.password)) {
     if (user.isBlocked) throw new CustomError(400, "Hesabınız Bloklandı");
+    user.isLogined = true;
+    await user.save();
     return { success: true, data: user };
   } else {
     throw new CustomError(400, "Wrong Password");

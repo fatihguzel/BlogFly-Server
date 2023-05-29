@@ -16,6 +16,10 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Please prove a password"],
     select: false,
   },
+  isLogined: {
+    type: Boolean,
+    default: false,
+  },
   isBlocked: {
     type: Boolean,
     default: false,

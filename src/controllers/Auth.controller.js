@@ -7,6 +7,7 @@ const {
   resetPasswordService,
   removeAccountService,
 } = require("../services/auth.services");
+const { User } = require("../model/UserModel");
 
 class AuthController {
   static register = expressAsyncHandler(async (req, res) => {
@@ -37,14 +38,22 @@ class AuthController {
   });
 
   static logout = expressAsyncHandler(async (req, res) => {
+    console.log("req:::", req.session);
+    const email = req.session.email;
+
+    const user = await User.findOne({ email: email });
+
+    user.isLogined = false;
+
+    await user.save();
+
     req.session.regenerate((err) => {
       if (err) throw new CustomError(400, err.message);
 
       req.session.email = null;
-
       req.session.save((err) => {
         if (err) throw new CustomError(400, err.message);
-        res.json({ success: true });
+        res.json({ success: true, user });
       });
     });
   });
