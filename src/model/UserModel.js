@@ -28,6 +28,13 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: "user",
   },
+  isConfirmed: {
+    type: Boolean,
+    default: false,
+  },
+  confirmCode: {
+    type: String,
+  },
 });
 
 module.exports.User = mongoose.model("User", UserSchema);
