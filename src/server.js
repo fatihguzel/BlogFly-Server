@@ -24,31 +24,9 @@ const io = socketIo(server, {
 // CORS yapılandırması
 app.use(cors());
 
-io.on("connection", (socket) => {
-  console.log("Yeni bir bağlantı kuruldu.");
-
-  socket.on("joinRoom", (room) => {
-    socket.join(room);
-    console.log(`Kullanıcı ${socket.id}, odaya katıldı: ${room}`);
-  });
-
-  socket.on("message", (data) => {
-    console.log("Gelen mesaj:", data);
-    io.to(data.room).emit("message", {
-      sender: data.sender,
-      message: data.message,
-    });
-  });
-
-  socket.on("disconnect", () => {
-    console.log("Bağlantı kesildi.");
-  });
-
-  // Kullanıcı adını güncelleme
-  socket.on("updateUserName", (userName) => {
-    socket.userName = userName;
-  });
-});
+// Socket aksiyonları
+const socketActions = require("./socket/socketActions");
+socketActions(io);
 
 const port = process.env.PORT || 5000;
 const version = process.env.NODE_ENV;

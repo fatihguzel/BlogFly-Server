@@ -7,6 +7,7 @@ const {
   resetPasswordService,
   removeAccountService,
   confirmUserService,
+  getUserByIdService,
 } = require("../services/auth.services");
 const { User } = require("../model/UserModel");
 
@@ -42,6 +43,13 @@ class AuthController {
   static getProfile = expressAsyncHandler(async (req, res) => {
     const user = req.user;
     const response = await getProfileService(user);
+
+    res.json(response);
+  });
+
+  static getUserById = expressAsyncHandler(async (req, res) => {
+    const { userId } = req.params;
+    const response = await getUserByIdService(userId);
 
     res.json(response);
   });

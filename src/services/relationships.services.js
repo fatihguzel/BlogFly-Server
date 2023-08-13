@@ -1,9 +1,16 @@
 const CustomError = require("../error/CustomError");
 const { RelationShips } = require("../model/Relationships");
+const { Room } = require("../model/RoomModel");
 const { User } = require("../model/UserModel");
+const { randomRoom } = require("../utils/randomRoom");
 
 const getFriendsService = async ({ user }) => {
   const relationships = await RelationShips.findOne({ user });
+  const rooms = await Room.find({ users: user._id }).select(
+    "+users -messages -_id -__v -createdAt -updatedAt"
+  );
+
+  console.log(rooms);
 
   for (let i = 0; i < relationships.friends.length; i++) {
     const friend = relationships.friends[i];
@@ -11,8 +18,12 @@ const getFriendsService = async ({ user }) => {
     friend.isLogined = auth.isLogined;
   }
 
-  console.log(relationships.friends);
-  return { success: true, data: relationships.friends };
+  const obj = {
+    friends: relationships.friends,
+    rooms: rooms,
+  };
+
+  return { success: true, data: obj };
 };
 
 const sendFriendRequestService = async ({ user, requestedUsername }) => {
@@ -135,9 +146,6 @@ const acceptFriendRequestService = async ({ user, requestedUsername }) => {
     (friend) => friend?.username !== user?.username
   );
 
-  console.log("senderPendingFriendRequests:::", senderPendingFriendRequests);
-  console.log("newPendingList:::", newPendingList);
-
   sender.friends.push({
     username: user?.username,
     email: user?.email,
@@ -145,6 +153,21 @@ const acceptFriendRequestService = async ({ user, requestedUsername }) => {
 
   sender.pendingRequest = newPendingList;
   await sender.save();
+
+  const room = await new Room({
+    roomName: `${randomRoom()}`,
+    messages: [
+      {
+        user: sender.user,
+      },
+      {
+        user: receiver.user,
+      },
+    ],
+    users: [sender.user, receiver.user],
+  });
+
+  await room.save();
 
   return { success: true, message: "Friend Request Accepted" };
 };

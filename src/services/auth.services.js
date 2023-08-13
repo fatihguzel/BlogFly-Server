@@ -82,6 +82,19 @@ const getProfileService = async (user) => {
   return { success: true, data: user };
 };
 
+const getUserByIdService = async (userId) => {
+  const user = await User.findOne({ _id: userId }).select(
+    "-password -__v -isConfirmed -confirmCode"
+  );
+
+  if (!user) throw new CustomError(400, "Kullanıcı bulunamadı");
+
+  return {
+    success: true,
+    data: user,
+  };
+};
+
 const resetPasswordService = async (
   email,
   oldPassword,
@@ -129,4 +142,5 @@ module.exports = {
   getProfileService,
   resetPasswordService,
   removeAccountService,
+  getUserByIdService,
 };
