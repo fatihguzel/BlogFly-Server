@@ -5,8 +5,10 @@ const authRouter = express.Router();
 
 authRouter.route("/register").post(AuthController.register);
 authRouter.route("/login").post(AuthController.login);
+authRouter.route("/confirm").post(AuthController.confirmUser);
 authRouter.route("/logout").get(AuthController.logout);
 authRouter.route("/profile").all(authMiddleware).get(AuthController.getProfile);
+authRouter.route("/getUserById/:userId").get(AuthController.getUserById);
 authRouter
   .route("/resetPassword")
   .all(authMiddleware)

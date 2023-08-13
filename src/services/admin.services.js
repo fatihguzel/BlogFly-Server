@@ -32,15 +32,15 @@ const userBlockedService = async (id) => {
     );
   user.isBlocked = true;
   if (userBlogs)
-    userBlogs.map((blog) => {
+    userBlogs.map(async (blog) => {
       blog.isBlocked = true;
-      blog.save();
+      await blog.save();
     });
 
   if (userComments)
-    userComments.map((comment) => {
+    userComments.map(async (comment) => {
       comment.isBlocked = true;
-      comment.save();
+      await comment.save();
     });
 
   await user.save();
@@ -63,15 +63,15 @@ const userUnBlockedService = async (id) => {
     );
   user.isBlocked = false;
   if (userBlogs)
-    userBlogs.map((blog) => {
+    userBlogs.map(async (blog) => {
       blog.isBlocked = false;
-      blog.save();
+      await blog.save();
     });
 
   if (userComments)
-    userComments.map((comment) => {
+    userComments.map(async (comment) => {
       comment.isBlocked = false;
-      comment.save();
+      await comment.save();
     });
 
   await user.save();
