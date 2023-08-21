@@ -64,14 +64,15 @@ class AuthController {
 
     await user.save();
 
-    req.session.regenerate((err) => {
-      if (err) throw new CustomError(400, err.message);
+    req.session.destroy((err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
 
-      req.session.email = null;
-      req.session.save((err) => {
-        if (err) throw new CustomError(400, err.message);
-        res.json({ success: true, user });
-      });
+    res.json({
+      success: true,
+      message: "Çıkış Yapıldı!",
     });
   });
 
